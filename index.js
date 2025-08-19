@@ -33,6 +33,8 @@ app.get('/feed.xml', (req, res) => {
         site_url: 'https://playground-5pwm.onrender.com',
         image_url: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg',
         author: 'Your Name or Company',
+        managingEditor: 'your-email@example.com (Your Name)',
+        webMaster: 'your-email@example.com (Your Name)',
         language: 'en-us',
         categories: ['Technology', 'Education'],
         pubDate: new Date(),
@@ -40,9 +42,23 @@ app.get('/feed.xml', (req, res) => {
             itunes: 'http://www.itunes.com/DTDs/Podcast-1.0.dtd',
         },
         custom_elements: [
-            { 'itunes:owner': [{ 'itunes:name': 'Your Name' }, { 'itunes:email': 'your-email@example.com' }] },
+            // Required by Apple Podcasts/Spotify
+            { 'itunes:author': 'Your Name or Company' },
+            { 'itunes:owner': [
+                { 'itunes:name': 'Your Name' },
+                { 'itunes:email': 'your-email@example.com' }
+            ]},
             { 'itunes:category': { _attr: { text: 'Technology' } } },
             { 'itunes:explicit': 'no' },
+            { 'itunes:email': 'your-email@example.com' },
+            // Additional recommended fields
+            { 'itunes:type': 'episodic' },
+            { 'itunes:complete': 'yes' },
+            { 'itunes:image': {
+                _attr: {
+                    href: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg'
+                }
+            }}
         ],
     });
 
