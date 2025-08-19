@@ -8,9 +8,9 @@ app.get('/feed.xml', (req, res) => {
     const feed = new RSS({
         title: 'Your Podcast Title',
         description: 'A brief description of your podcast.',
-        feed_url: 'http://localhost:3000/feed.xml',
-        site_url: 'http://localhost:3000',
-        image_url: 'https://your-domain.com/podcast-cover.jpg',
+        feed_url: 'https://playground-5pwm.onrender.com/feed.xml',
+        site_url: 'https://playground-5pwm.onrender.com',
+        image_url: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg',
         author: 'Your Name or Company',
         language: 'en-us',
         categories: ['Technology', 'Education'],
@@ -28,10 +28,10 @@ app.get('/feed.xml', (req, res) => {
     feed.item({
         title: 'Episode Title',
         description: 'Description of this episode.',
-        url: 'http://localhost:3000/episode1.mp3',
+        url: 'https://playground-5pwm.onrender.com/assets/episode1.mp3',
         guid: 'unique-episode-identifier',
         enclosure: {
-            url: 'http://localhost:3000/episode1.mp3',
+            url: 'https://playground-5pwm.onrender.com/assets/episode1.mp3',
             size: 12345678,
             type: 'audio/mpeg',
         },
