@@ -6,86 +6,93 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Serve static files from the assets directory
-app.use('/assets', express.static(path.join(__dirname, 'assets'), {
+app.use(
+  '/assets',
+  express.static(path.join(__dirname, 'assets'), {
     setHeaders: (res, filePath) => {
-        // Set appropriate MIME types for common file types
-        const mimeTypes = {
-            '.jpeg': 'image/jpeg',
-            '.jpg': 'image/jpeg',
-            '.png': 'image/png',
-            '.mp3': 'audio/mpeg',
-            '.mp4': 'video/mp4',
-            '.pdf': 'application/pdf'
-        };
-        
-        const ext = path.extname(filePath);
-        if (mimeTypes[ext]) {
-            res.setHeader('Content-Type', mimeTypes[ext]);
-        }
-    }
-}));
+      // Set appropriate MIME types for common file types
+      const mimeTypes = {
+        '.jpeg': 'image/jpeg',
+        '.jpg': 'image/jpeg',
+        '.png': 'image/png',
+        '.mp3': 'audio/mpeg',
+        '.mp4': 'video/mp4',
+        '.pdf': 'application/pdf',
+      };
+
+      const ext = path.extname(filePath);
+      if (mimeTypes[ext]) {
+        res.setHeader('Content-Type', mimeTypes[ext]);
+      }
+    },
+  })
+);
 
 app.get('/feed.xml', (req, res) => {
-    const feed = new RSS({
-        title: 'Your Podcast Title',
-        description: 'A brief description of your podcast.',
-        feed_url: 'https://playground-5pwm.onrender.com/feed.xml',
-        site_url: 'https://playground-5pwm.onrender.com',
-        image_url: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg',
-        author: 'Your Name or Company',
-        managingEditor: 'your-email@example.com (Your Name)',
-        webMaster: 'your-email@example.com (Your Name)',
-        language: 'en-us',
-        categories: ['Technology', 'Education'],
-        pubDate: new Date(),
-        custom_namespaces: {
-            itunes: 'http://www.itunes.com/DTDs/Podcast-1.0.dtd',
-        },
-        custom_elements: [
-            // Required by Apple Podcasts/Spotify
-            { 'itunes:author': 'Your Name or Company' },
-            { 'itunes:owner': [
-                { 'itunes:name': 'Your Name' },
-                { 'itunes:email': 'your-email@example.com' }
-            ]},
-            { 'itunes:category': { _attr: { text: 'Technology' } } },
-            { 'itunes:explicit': 'no' },
-            { 'itunes:email': 'your-email@example.com' },
-            // Additional recommended fields
-            { 'itunes:type': 'episodic' },
-            { 'itunes:complete': 'yes' },
-            { 'itunes:image': {
-                _attr: {
-                    href: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg'
-                }
-            }}
+  const feed = new RSS({
+    title: 'Your Podcast Title',
+    description: 'A brief description of your podcast.',
+    feed_url: 'https://playground-5pwm.onrender.com/feed.xml',
+    site_url: 'https://playground-5pwm.onrender.com',
+    image_url: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg',
+    author: 'Your Name or Company',
+    managingEditor: 'm6necnhsvm@jkotypc.com (Your Name)',
+    webMaster: 'm6necnhsvm@jkotypc.com (Your Name)',
+    language: 'en-us',
+    categories: ['Technology', 'Education'],
+    pubDate: new Date(),
+    custom_namespaces: {
+      itunes: 'http://www.itunes.com/DTDs/Podcast-1.0.dtd',
+    },
+    custom_elements: [
+      // Required by Apple Podcasts/Spotify
+      { 'itunes:author': 'Your Name or Company' },
+      {
+        'itunes:owner': [
+          { 'itunes:name': 'Your Name' },
+          { 'itunes:email': 'm6necnhsvm@jkotypc.com' },
         ],
-    });
-
-    feed.item({
-        title: 'Episode Title',
-        description: 'Description of this episode.',
-        url: 'https://playground-5pwm.onrender.com/assets/episode1.mp3',
-        guid: 'unique-episode-identifier',
-        enclosure: {
-            url: 'https://playground-5pwm.onrender.com/assets/episode1.mp3',
-            size: 12345678,
-            type: 'audio/mpeg',
+      },
+      { 'itunes:category': { _attr: { text: 'Technology' } } },
+      { 'itunes:explicit': 'no' },
+      { 'itunes:email': 'm6necnhsvm@jkotypc.com' },
+      // Additional recommended fields
+      { 'itunes:type': 'episodic' },
+      { 'itunes:complete': 'yes' },
+      {
+        'itunes:image': {
+          _attr: {
+            href: 'https://playground-5pwm.onrender.com/assets/podcast-cover.jpeg',
+          },
         },
-        date: new Date(),
-        custom_elements: [
-            { 'itunes:author': 'Episode Author' },
-            { 'itunes:summary': 'A concise summary of the episode.' },
-            { 'itunes:duration': '00:30:00' },
-        ],
-    });
+      },
+    ],
+  });
 
-    const xml = feed.xml({ indent: true });
-    res.type('application/xml');
-    res.send(xml);
+  feed.item({
+    title: 'Episode Title',
+    description: 'Description of this episode.',
+    url: 'https://playground-5pwm.onrender.com/assets/episode1.mp3',
+    guid: 'unique-episode-identifier',
+    enclosure: {
+      url: 'https://playground-5pwm.onrender.com/assets/episode1.mp3',
+      size: 12345678,
+      type: 'audio/mpeg',
+    },
+    date: new Date(),
+    custom_elements: [
+      { 'itunes:author': 'Episode Author' },
+      { 'itunes:summary': 'A concise summary of the episode.' },
+      { 'itunes:duration': '00:30:00' },
+    ],
+  });
+
+  const xml = feed.xml({ indent: true });
+  res.type('application/xml');
+  res.send(xml);
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-    console.log(`RSS feed available at http://localhost:${port}/feed.xml`);
+  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`RSS feed available at http://localhost:${port}/feed.xml`);
 });
