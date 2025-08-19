@@ -1,8 +1,29 @@
 const express = require('express');
+const path = require('path');
 const RSS = require('rss');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+// Serve static files from the assets directory
+app.use('/assets', express.static(path.join(__dirname, 'assets'), {
+    setHeaders: (res, filePath) => {
+        // Set appropriate MIME types for common file types
+        const mimeTypes = {
+            '.jpeg': 'image/jpeg',
+            '.jpg': 'image/jpeg',
+            '.png': 'image/png',
+            '.mp3': 'audio/mpeg',
+            '.mp4': 'video/mp4',
+            '.pdf': 'application/pdf'
+        };
+        
+        const ext = path.extname(filePath);
+        if (mimeTypes[ext]) {
+            res.setHeader('Content-Type', mimeTypes[ext]);
+        }
+    }
+}));
 
 app.get('/feed.xml', (req, res) => {
     const feed = new RSS({
